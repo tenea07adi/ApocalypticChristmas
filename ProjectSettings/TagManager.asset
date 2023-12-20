@@ -41,3 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3368648239
+    locked: 0
+  - name: Montains
+    uniqueID: 1774192549
+    locked: 0
+  - name: Platforms
+    uniqueID: 2330667021
+    locked: 0
+  - name: Character
+    uniqueID: 1574325143
+    locked: 0
+  - name: SnowingParticles
+    uniqueID: 2963372805
+    locked: 0
