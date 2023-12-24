@@ -6,7 +6,7 @@ using static TimerController;
 
 public class TimerController : MonoBehaviour
 {
-    public static TimerController instance;
+    public static TimerController instance = null;
 
     public delegate void ActionToRun();
 
