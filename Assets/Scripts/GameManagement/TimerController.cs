@@ -93,8 +93,10 @@ public class TimerController : MonoBehaviour
     {
         int minNextActionToRunTime = 0;
 
-        foreach (var ac in actionsToRun)
+        for (int i = 0; i < actionsToRun.Count; i++)
         {
+            var ac = actionsToRun[i];
+
             if (ac.NextActionRunTime <= currentTimeInSecond)
             {
                 ac.ActionToRun.Invoke();
@@ -117,7 +119,8 @@ public class TimerController : MonoBehaviour
                 }
                 else
                 {
-                    actionsToRun.Remove(ac);
+                    actionsToRun.RemoveAt(i);
+                    i--;
                 }
             }
             else
@@ -127,11 +130,29 @@ public class TimerController : MonoBehaviour
                     minNextActionToRunTime = ac.NextActionRunTime;
                 }
             }
+        }
 
+        if(actionsToRun.Count > 0 && minNextActionToRunTime == 0)
+        {
+            minNextActionToRunTime = GetMinRunTime(actionsToRun);
         }
 
         nextActionRunTime = minNextActionToRunTime;
+    }
 
+    private int GetMinRunTime(List<TimerActionSettings> actions)
+    {
+        int min = 0;
+
+        foreach (var ac in actions)
+        {
+            if(min == 0 || ac.NextActionRunTime < min)
+            {
+                min = ac.NextActionRunTime;
+            }
+        }
+
+        return min;
     }
 
 }

@@ -24,6 +24,7 @@ public class GiftController : MonoBehaviour
     void Start()
     {
         rigidbody.rotation = rotation;
+        SetDestroyTime();
     }
 
     // Update is called once per frame
@@ -42,5 +43,15 @@ public class GiftController : MonoBehaviour
     private void DoMovement()
     {
         MovementMechanic.MoveX(directionalValue, speed, rigidbody);
+    }
+
+    private void SetDestroyTime()
+    {
+        TimerController.instance.AddAction(5,false, DestroyGift);
+    }
+
+    private void DestroyGift()
+    {
+        Destroy(this.gameObject);
     }
 }

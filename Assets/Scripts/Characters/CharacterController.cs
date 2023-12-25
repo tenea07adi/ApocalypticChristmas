@@ -21,6 +21,9 @@ public class CharacterController : MonoBehaviour
     // false - left, true - right
     private bool lastDirectionX = false;
 
+    [SerializeField]
+    private int hp = 3;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,12 +34,37 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!IsAllive())
+        {
+            return;
+        }
+
         DoMovement();
     }
 
     public Vector3 GetCurrentPosition()
     {
         return this.transform.position;
+    }
+
+    public int GetHP()
+    {
+        return hp;
+    }
+
+    public bool IsAllive()
+    {
+        return hp > 0;
+    }
+
+    public void HitThePlayer(int damage)
+    {
+        this.hp -= damage;
+
+        if(hp < 0)
+        {
+            hp = 0;
+        }
     }
 
     private void DoMovement()
