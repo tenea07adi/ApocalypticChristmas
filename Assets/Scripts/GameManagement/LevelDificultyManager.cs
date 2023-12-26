@@ -65,4 +65,22 @@ public class LevelDificultyManager : MonoBehaviour
     {
         return currentDifficulty;
     }
+
+    public int GetCurrentDifficultyAsDisplayNumber()
+    {
+       switch (currentDifficulty)
+        {
+            case DifficultyLevels.dif1:
+                return 1;
+            case DifficultyLevels.dif2:
+                return 2;
+            case DifficultyLevels.dif3:
+                return 3;
+            case DifficultyLevels.dif4:
+                return 4;
+            case DifficultyLevels.dif5:
+                return 5;
+        }
+        return 0;
+    }
 }

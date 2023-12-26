@@ -104,7 +104,7 @@ public class TimerController : MonoBehaviour
 
             if (ac.NextActionRunTime <= currentTimeInSecond)
             {
-                ac.ActionToRun.Invoke();
+                ac.ActionToRun?.Invoke();
 
                 if (ac.LoopActionRun)
                 {

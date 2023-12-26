@@ -27,16 +27,15 @@ public class CharacterController : MonoBehaviour
     private float movementSpeed = 1;
     // false - left, true - right
     private bool lastDirectionX = false;
-    [SerializeField]
-    private int jumpsAvailible = 2;
-    [SerializeField]
-    private int maxJumpsAvailible = 2;
-
 
     [SerializeField]
-    private int hp = 3;
+    private CharacterStat hp = null;
+
     [SerializeField]
-    private int maxHp = 3;
+    private CharacterStat energy = null;
+
+    [SerializeField]
+    private CharacterStat jumps = null;
 
 
 
@@ -44,6 +43,9 @@ public class CharacterController : MonoBehaviour
     void Start()
     {
         _instance = this;
+        hp = new CharacterStat(3, 3);
+        jumps = new CharacterStat(2, 2);
+        InitEnergyLogic();
     }
 
     // Update is called once per frame
@@ -51,6 +53,7 @@ public class CharacterController : MonoBehaviour
     {
         if(!IsAllive())
         {
+            this.rigidbody.velocity = Vector3.zero;
             return;
         }
 
@@ -62,28 +65,53 @@ public class CharacterController : MonoBehaviour
         return this.transform.position;
     }
 
-    public int GetHP()
+    // Energy logic
+
+    public int GetEnergy()
     {
-        return hp;
+        return energy.GetCurrent();
     }
 
-    public bool IsAllive()
+    public void IncreaseEnergy()
     {
-        return hp > 0;
+        energy.Increase();
+    }
+
+    private void InitEnergyLogic()
+    {
+        energy = new CharacterStat(5, 5, OnEnergyZero);
+        TimerController.instance.AddAction(5, true, energy.Decrease);
+    }
+
+    private void OnEnergyZero()
+    {
+        HitThePlayer(hp.GetMax());
+    }
+
+    // HP logic
+    public int GetHP()
+    {
+        return hp.GetCurrent();
+    }
+
+    public void IncreaseHP()
+    {
+        hp.Increase();
     }
 
     public void HitThePlayer(int damage)
     {
-        this.hp -= damage;
-
         _damageAudioSource.Play();
 
-        if (hp < 0)
-        {
-            hp = 0;
-        }
+        hp.Decrease();
     }
 
+    public bool IsAllive()
+    {
+        return hp.IsNotZero();
+    }
+
+    // Movement logic
     public bool IsGrounded()
     {
         return this.rigidbody.velocity.y == 0;
@@ -94,7 +122,7 @@ public class CharacterController : MonoBehaviour
     {
         if (IsGrounded())
         {
-            jumpsAvailible = maxJumpsAvailible;
+            jumps.Reset();
         }
 
         float inputX = Input.GetAxis("Horizontal");
@@ -118,9 +146,9 @@ public class CharacterController : MonoBehaviour
             }
         }
 
-        if(isJumping && jumpsAvailible > 0)
+        if(isJumping && jumps.IsNotZero())
         {
-            jumpsAvailible--;
+            jumps.Decrease();
             MovementMechanic.Jump(jumpPower, rigidbody);
             _jumpAudioSource.Play();
         }
@@ -143,4 +171,69 @@ public class CharacterController : MonoBehaviour
         lastDirectionX = currentDirectionX;
     }
 
+}
+
+public class CharacterStat
+{
+    public delegate void DoAtZero();
+
+    private int currentValue = 0;
+    private int maxValue = 0;
+    private DoAtZero doAtZero = null;
+
+    public CharacterStat(int maxValue, int startValue) : this(maxValue, startValue, null)
+    {
+    }
+
+    public CharacterStat(int maxValue, int startValue, DoAtZero doAtZeroFunc)
+    {
+        this.maxValue = maxValue;
+        this.currentValue = startValue;
+        this.doAtZero = doAtZeroFunc;
+    }
+
+    public void Increase()
+    {
+        currentValue = currentValue + 1;
+
+        if(currentValue > maxValue)
+        {
+            currentValue = maxValue;
+        }
+    }
+
+    public void Decrease()
+    {
+        currentValue = currentValue - 1;
+
+        if( currentValue < 0 ) 
+        { 
+            currentValue = 0;
+        }
+
+        if( currentValue <= 0 )
+        {
+            doAtZero?.Invoke();
+        }
+    }
+
+    public void Reset()
+    {
+        currentValue = maxValue;
+    }
+
+    public int GetCurrent()
+    {
+        return currentValue;
+    }
+
+    public int GetMax()
+    {
+        return maxValue;
+    }
+
+    public bool IsNotZero()
+    {
+        return currentValue > 0;
+    }
 }
