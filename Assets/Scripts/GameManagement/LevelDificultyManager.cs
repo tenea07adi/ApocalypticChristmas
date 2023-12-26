@@ -44,7 +44,7 @@ public class LevelDificultyManager : MonoBehaviour
 
         currentDifficulty -= 1;
 
-        DifficultyChanged.Invoke();
+        DifficultyChanged?.Invoke();
     }
 
     public void IncreaseDifficulty()
@@ -58,6 +58,11 @@ public class LevelDificultyManager : MonoBehaviour
 
         currentDifficulty += 1;
 
-        DifficultyChanged.Invoke();
+        DifficultyChanged?.Invoke();
+    }
+
+    public DifficultyLevels GetCurrentDifficulty()
+    {
+        return currentDifficulty;
     }
 }

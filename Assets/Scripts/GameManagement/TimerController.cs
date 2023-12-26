@@ -58,6 +58,11 @@ public class TimerController : MonoBehaviour
         }
     }
 
+    public int GetCurrentTimeInSeconds()
+    {
+        return currentTimeInSecond;
+    }
+
     public void AddAction(int secondsToWait, bool loop, ActionToRun action)
     {
         int nextRun = currentTimeInSecond + secondsToWait;

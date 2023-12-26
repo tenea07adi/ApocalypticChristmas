@@ -14,15 +14,30 @@ public class CharacterController : MonoBehaviour
     private Animator _animator;
 
     [SerializeField]
+    private AudioSource _damageAudioSource;
+    [SerializeField]
+    private AudioSource _movementAudioSource;
+    [SerializeField]
+    private AudioSource _jumpAudioSource;
+
+
+    [SerializeField]
     private float jumpPower = 1;
     [SerializeField]
     private float movementSpeed = 1;
-
     // false - left, true - right
     private bool lastDirectionX = false;
+    [SerializeField]
+    private int jumpsAvailible = 2;
+    [SerializeField]
+    private int maxJumpsAvailible = 2;
+
 
     [SerializeField]
     private int hp = 3;
+    [SerializeField]
+    private int maxHp = 3;
+
 
 
     // Start is called before the first frame update
@@ -61,14 +76,27 @@ public class CharacterController : MonoBehaviour
     {
         this.hp -= damage;
 
-        if(hp < 0)
+        _damageAudioSource.Play();
+
+        if (hp < 0)
         {
             hp = 0;
         }
     }
 
+    public bool IsGrounded()
+    {
+        return this.rigidbody.velocity.y == 0;
+        //return Physics.Raycast(transform.position, -Vector3.up, 0.1f);
+    }
+
     private void DoMovement()
     {
+        if (IsGrounded())
+        {
+            jumpsAvailible = maxJumpsAvailible;
+        }
+
         float inputX = Input.GetAxis("Horizontal");
 
         bool isJumping = Input.GetKeyDown(KeyCode.Space);
@@ -76,11 +104,25 @@ public class CharacterController : MonoBehaviour
         if(inputX != 0)
         {
             MovementMechanic.MoveX(inputX, movementSpeed, rigidbody);
+
+            if (IsGrounded())
+            {
+                if (!_movementAudioSource.isPlaying)
+                {
+                    _movementAudioSource.Play();
+                }
+            }
+            else
+            {
+                _movementAudioSource.Stop();
+            }
         }
 
-        if(isJumping)
+        if(isJumping && jumpsAvailible > 0)
         {
+            jumpsAvailible--;
             MovementMechanic.Jump(jumpPower, rigidbody);
+            _jumpAudioSource.Play();
         }
 
         UpdateAnimations(inputX);
@@ -100,4 +142,5 @@ public class CharacterController : MonoBehaviour
 
         lastDirectionX = currentDirectionX;
     }
+
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GiftController : MonoBehaviour
@@ -53,5 +54,13 @@ public class GiftController : MonoBehaviour
     private void DestroyGift()
     {
         Destroy(this.gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+       if(col.gameObject.tag == "Player")
+        {
+            CharacterController._instance.HitThePlayer(1);
+        }
     }
 }
