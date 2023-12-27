@@ -45,8 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuSceneName: Menu
-  currentScene:
-    m_Handle: 0
-  scenes:
-  - {fileID: 102900000, guid: 10d467dfea9a4e34da59007a0bcabe2e, type: 3}
-  - {fileID: 102900000, guid: 80e3425eb3d4eb04fa71243e2366ac44, type: 3}
+  currentSceneName: Menu
+  scenesNames:
+  - Menu
+  - GameMap_1

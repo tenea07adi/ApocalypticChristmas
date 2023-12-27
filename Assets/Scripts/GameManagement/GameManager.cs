@@ -13,10 +13,10 @@ public class GameManager : MonoBehaviour
     private string menuSceneName = "MenuScene";
 
     [SerializeField]
-    private Scene currentScene;
+    private string currentSceneName;
 
     [SerializeField]
-    private List<SceneAsset> scenes = new List<SceneAsset>();
+    private List<string> scenesNames = new List<string>();
 
     private List<SceneDetails> scenesDetails = new List<SceneDetails>();
 
@@ -72,14 +72,14 @@ public class GameManager : MonoBehaviour
         ToggleAllPaussableObjects(isPaused);
     }
     
-    public void LoadLevel(SceneAsset lvlScene)
+    public void LoadLevel(string lvlSceneString)
     {
-        scenesDetails.Where(c => c.sceneName == lvlScene.name).First()?.Load();
+        scenesDetails.Where(c => c.sceneName == lvlSceneString).First()?.Load();
     }
 
     public void Restart()
     {
-        scenesDetails.Where(c => c.sceneName == currentScene.name).First().Restart();
+        scenesDetails.Where(c => c.sceneName == currentSceneName).First().Restart();
     }
 
     public void ExitGame()
@@ -133,16 +133,16 @@ public class GameManager : MonoBehaviour
 
     private void LoadScenesData()
     {
-        foreach (var scene in scenes)
+        foreach (var scene in scenesNames)
         {
             if (scene != null)
             {
-                scenesDetails.Add(new SceneDetails(scene.name));
+                scenesDetails.Add(new SceneDetails(scene));
             }
         }
 
         // get current scene
-        currentScene = SceneManager.GetActiveScene();
+        currentSceneName = SceneManager.GetActiveScene().name;
     }
 
     private void ToggleAllPaussableObjects(bool state)
@@ -177,7 +177,6 @@ public class SceneDetails
 
     public void Load()
     {
-        Debug.Log(sceneName);
         SceneManager.LoadScene(sceneName);
     }
 }
