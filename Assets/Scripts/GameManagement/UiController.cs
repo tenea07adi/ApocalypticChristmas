@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -7,6 +8,11 @@ using UnityEngine.UIElements;
 public class UiController : MonoBehaviour
 {
     public static UiController instance;
+
+    [SerializeField]
+    private GameObject pausePanel;
+    [SerializeField]
+    private GameObject endGamePanel;
 
     [SerializeField]
     private Text timerText;
@@ -41,6 +47,26 @@ public class UiController : MonoBehaviour
         ManageEnergy();
     }
 
+    public void TogglePausePanel()
+    {
+        TogglePausePanel(!pausePanel.active);
+    }
+
+    public void TogglePausePanel(bool state)
+    {
+        if(endGamePanel.active == false)
+        {
+            pausePanel.SetActive(state);
+        }
+    }
+
+    public void ToggleEndGamePanel(bool state)
+    {
+        TogglePausePanel(false);
+
+        endGamePanel.SetActive(state);
+    }
+
     private void ManageHp()
     {
         hpStats.Set(CharacterController._instance.GetHP());
@@ -68,6 +94,7 @@ public class UiController : MonoBehaviour
 
         timerText.text = currentTime;
     }
+
 }
 
 public class DisplayStats
