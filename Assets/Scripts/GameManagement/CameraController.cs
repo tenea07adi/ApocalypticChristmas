@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraController : BasePausableGameObjectController
 {
     [SerializeField]
     private float yCharacterDiff = 1;
@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateLogic()
     {
         FollowTheCharacter();
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static TimerController;
 
-public class TimerController : MonoBehaviour
+public class TimerController : BasePausableGameObjectController
 {
     public static TimerController instance = null;
 
@@ -37,7 +37,7 @@ public class TimerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateLogic()
     {
         if (actionsToRun != null || actionsToRun.Count > 0)
         {

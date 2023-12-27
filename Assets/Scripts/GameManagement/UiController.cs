@@ -18,6 +18,9 @@ public class UiController : MonoBehaviour
     private Text timerText;
 
     [SerializeField]
+    private Text endGameTimerText;
+
+    [SerializeField]
     List<UnityEngine.UI.Image> hpImages;
     [SerializeField]
     List<UnityEngine.UI.Image> difficultyImages;
@@ -93,6 +96,7 @@ public class UiController : MonoBehaviour
         currentTime = $"{minutes} : {seconds}";
 
         timerText.text = currentTime;
+        endGameTimerText.text = currentTime;
     }
 
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectablesGenerator : MonoBehaviour
+public class CollectablesGenerator : BasePausableGameObjectController
 {
     public static CollectablesGenerator instance;
 
@@ -27,9 +27,8 @@ public class CollectablesGenerator : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateLogic()
     {
-        
     }
 
     private void TransformObjectsToVector3()
@@ -100,6 +99,5 @@ public class CollectablesGenerator : MonoBehaviour
 
         return -1;
     }
-
 }
 

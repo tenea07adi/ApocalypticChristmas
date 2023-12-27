@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelDificultyManager : MonoBehaviour
+public class LevelDificultyManager : BasePausableGameObjectController
 {
     public static LevelDificultyManager instance = null;
     public enum DifficultyLevels { dif1 = 0, dif2 = 1, dif3 = 2, dif4 = 3, dif5 = 4 };
@@ -24,9 +24,8 @@ public class LevelDificultyManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateLogic()
     {
-        
     }
 
     private void ManageDifficulty()
@@ -83,4 +82,5 @@ public class LevelDificultyManager : MonoBehaviour
         }
         return 0;
     }
+
 }

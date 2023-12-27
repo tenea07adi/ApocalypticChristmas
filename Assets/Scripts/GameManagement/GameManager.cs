@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
 
     private List<SceneDetails> scenesDetails = new List<SceneDetails>();
 
+    private bool isPaused = false;
+    private bool isEnded = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,12 +40,36 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
+        if (isEnded)
+        {
+            return;
+        }
 
+        isPaused = true;
+
+        if (UiController.instance != null)
+        {
+            UiController.instance.TogglePausePanel(isPaused);
+        }
+
+        ToggleAllPaussableObjects(isPaused);
     }
 
     public void Resume()
     {
+        if (isEnded)
+        {
+            return;
+        }
 
+        isPaused = false;
+
+        if (UiController.instance != null)
+        {
+            UiController.instance.TogglePausePanel(isPaused);
+        }
+
+        ToggleAllPaussableObjects(isPaused);
     }
     
     public void LoadLevel(SceneAsset lvlScene)
@@ -69,30 +96,38 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(UiController.instance != null)
+            if(isPaused)
             {
-                UiController.instance.TogglePausePanel();
+                Resume();
+            }
+            else
+            {
+                Pause();
             }
         }
     }
 
     private void CheckIfGameEnded()
     {
-        if (GameEnded())
+        if (GameEnded() && !isEnded)
         {
             if (UiController.instance != null)
             {
+                Pause();
                 UiController.instance.ToggleEndGamePanel(true);
             }
+
+            isEnded = true;
         }
     }
 
     private bool GameEnded()
     {
-        if (!CharacterController._instance.IsAllive())
+        if (CharacterController._instance != null && !CharacterController._instance.IsAllive())
         {
             return true;
         }
+
         return false;
     }
 
@@ -108,6 +143,21 @@ public class GameManager : MonoBehaviour
 
         // get current scene
         currentScene = SceneManager.GetActiveScene();
+    }
+
+    private void ToggleAllPaussableObjects(bool state)
+    {
+        var objs = GetPaussableObjects();
+
+        foreach (var obj in objs)
+        {
+            obj.TogglePause(state);
+        }
+    }
+
+    private List<BasePausableGameObjectController> GetPaussableObjects()
+    {
+        return FindObjectsOfType<BasePausableGameObjectController>().ToList();
     }
 }
 

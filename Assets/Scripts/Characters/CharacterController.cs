@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class CharacterController : BasePausableGameObjectController
 {
     public static CharacterController _instance;
 
@@ -49,11 +49,10 @@ public class CharacterController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateLogic()
     {
-        if(!IsAllive())
+        if (!IsAllive())
         {
-            this.rigidbody.velocity = Vector3.zero;
             return;
         }
 
@@ -103,7 +102,10 @@ public class CharacterController : MonoBehaviour
     {
         _damageAudioSource.Play();
 
-        hp.Decrease();
+        for(int i = 0; i < damage; i++)
+        {
+            hp.Decrease();
+        }
     }
 
     public bool IsAllive()

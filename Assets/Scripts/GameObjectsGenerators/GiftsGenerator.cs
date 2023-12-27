@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GiftsGenerator : BaseGameObjectsGenerator
+public class GiftsGenerator : BasePausableGameObjectController
 {
     public static GiftsGenerator instance;
 
@@ -29,7 +29,7 @@ public class GiftsGenerator : BaseGameObjectsGenerator
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateLogic()
     {
     }
 
@@ -40,11 +40,6 @@ public class GiftsGenerator : BaseGameObjectsGenerator
 
     private void SpawnGiftsPerSecond()
     {
-        if(paused) 
-        { 
-            return;
-        }
-
         for(int i = 0; i < giftsOnSecond; i++)
         {
             SpawnGift();

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GiftController : MonoBehaviour
+public class GiftController : BasePausableGameObjectController
 {
 
     [SerializeField]
@@ -15,8 +15,6 @@ public class GiftController : MonoBehaviour
 
     [SerializeField]
     private float rotation = 0;
-    private float maxRotation = 0;
-    private float minRotation = 25;
 
     [SerializeField]
     private Rigidbody2D rigidbody = null;
@@ -29,7 +27,7 @@ public class GiftController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdateLogic()
     {
         DoMovement();
     }
@@ -48,7 +46,7 @@ public class GiftController : MonoBehaviour
 
     private void SetDestroyTime()
     {
-        TimerController.instance.AddAction(5,false, DestroyGift);
+        TimerController.instance.AddAction(10,false, DestroyGift);
     }
 
     private void DestroyGift()
